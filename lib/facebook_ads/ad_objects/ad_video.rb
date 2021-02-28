@@ -27,6 +27,7 @@ module FacebookAds
 
   class AdVideo < AdObject
     CONTAINER_TYPE = [
+      "ACO_AUTOEXTRACTED_VIDEO",
       "ACO_VIDEO_VARIATION",
       "AD_BREAK_PREVIEW",
       "AD_DERIVATIVE",
@@ -64,6 +65,8 @@ module FacebookAds
       "EVENT_TOUR",
       "FACECAST_DVR",
       "FB_SHORTS",
+      "FB_SHORTS_GROUP_POST",
+      "FB_SHORTS_POST",
       "FUNDRAISER_COVER_VIDEO",
       "GAME_CLIP",
       "GAMING_UPDATE_VIDEO",
@@ -256,7 +259,6 @@ module FacebookAds
     field :animated_effect_id, 'int'
     field :application_id, 'string'
     field :asked_fun_fact_prompt_id, 'int'
-    field :attribution_app_id, 'string'
     field :audio_story_wave_animation_handle, 'string'
     field :chunk_session_id, 'string'
     field :composer_entry_picker, 'string'
@@ -383,16 +385,6 @@ module FacebookAds
         api.has_param :show_gradient, 'bool'
         api.has_param :show_results, 'bool'
       end
-    end
-
-    has_edge :reactions do |edge|
-      edge.get 'Profile' do |api|
-        api.has_param :type, { enum: -> { Profile::TYPE }}
-      end
-    end
-
-    has_edge :sharedposts do |edge|
-      edge.get 'Post'
     end
 
     has_edge :sponsor_tags do |edge|

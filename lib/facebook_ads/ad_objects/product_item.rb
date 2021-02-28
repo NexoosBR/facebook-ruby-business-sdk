@@ -293,6 +293,7 @@ module FacebookAds
     field :additional_variant_attributes, 'hash'
     field :age_group, { enum: -> { AGE_GROUP }}
     field :applinks, 'CatalogItemAppLinks'
+    field :ar_data, 'ProductItemArData'
     field :availability, { enum: -> { AVAILABILITY }}
     field :brand, 'string'
     field :capability_to_review_status, 'hash'
@@ -323,6 +324,7 @@ module FacebookAds
     field :mobile_link, 'string'
     field :name, 'string'
     field :ordering_index, 'int'
+    field :parent_product_id, 'string'
     field :pattern, 'string'
     field :price, 'string'
     field :product_catalog, 'ProductCatalog'
@@ -343,7 +345,6 @@ module FacebookAds
     field :start_date, 'string'
     field :url, 'string'
     field :visibility, { enum: -> { VISIBILITY }}
-    field :additional_image_files, { list: 'file' }
     field :additional_uploaded_image_ids, { list: 'string' }
     field :android_app_name, 'string'
     field :android_class, 'string'
@@ -368,6 +369,10 @@ module FacebookAds
     field :windows_phone_app_id, 'string'
     field :windows_phone_app_name, 'string'
     field :windows_phone_url, 'string'
+
+    has_edge :channels_to_integrity_status do |edge|
+      edge.get 'CatalogItemChannelsToIntegrityStatus'
+    end
 
     has_edge :product_sets do |edge|
       edge.get 'ProductSet'

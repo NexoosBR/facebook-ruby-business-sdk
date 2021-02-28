@@ -380,6 +380,7 @@ module FacebookAds
     field :fan_count, 'int'
     field :featured_video, 'AdVideo'
     field :features, 'string'
+    field :followers_count, 'int'
     field :food_styles, { list: 'string' }
     field :founded, 'string'
     field :general_info, 'string'
@@ -589,10 +590,11 @@ module FacebookAds
     end
 
     has_edge :claimed_urls do |edge|
-      edge.delete do |api|
-        api.has_param :url, 'string'
-      end
       edge.get 'Url'
+    end
+
+    has_edge :commerce_eligibility do |edge|
+      edge.get 'PageCommerceEligibility'
     end
 
     has_edge :commerce_merchant_settings do |edge|
@@ -815,6 +817,21 @@ module FacebookAds
       edge.get 'Page'
     end
 
+    has_edge :image_copyrights do |edge|
+      edge.get 'ImageCopyright'
+      edge.post 'ImageCopyright' do |api|
+        api.has_param :artist, 'string'
+        api.has_param :creator, 'string'
+        api.has_param :custom_id, 'string'
+        api.has_param :description, 'string'
+        api.has_param :filename, 'string'
+        api.has_param :geo_ownership, { list: { enum: -> { ImageCopyright::GEO_OWNERSHIP }} }
+        api.has_param :original_content_creation_date, 'int'
+        api.has_param :reference_photo, 'string'
+        api.has_param :title, 'string'
+      end
+    end
+
     has_edge :indexed_videos do |edge|
       edge.get 'AdVideo'
     end
@@ -1002,7 +1019,7 @@ module FacebookAds
 
     has_edge :messenger_profile do |edge|
       edge.delete do |api|
-        api.has_param :fields, { list: { enum: %w{ACCOUNT_LINKING_URL GET_STARTED GREETING HOME_URL ICE_BREAKERS PAYMENT_SETTINGS PERSISTENT_MENU PLATFORM TARGET_AUDIENCE WHITELISTED_DOMAINS }} }
+        api.has_param :fields, { list: { enum: %w{ACCOUNT_LINKING_URL GET_STARTED GREETING HOME_URL ICE_BREAKERS PAYMENT_SETTINGS PERSISTENT_MENU PLATFORM SUBJECT_TO_NEW_EU_PRIVACY_RULES TARGET_AUDIENCE WHITELISTED_DOMAINS }} }
       end
       edge.get 'MessengerProfile'
       edge.post 'Page' do |api|
@@ -1311,7 +1328,7 @@ module FacebookAds
     end
 
     has_edge :tours do |edge|
-      edge.get 'EventTour'
+      edge.get
     end
 
     has_edge :unlink_accounts do |edge|
@@ -1363,7 +1380,6 @@ module FacebookAds
         api.has_param :animated_effect_id, 'int'
         api.has_param :application_id, 'string'
         api.has_param :asked_fun_fact_prompt_id, 'int'
-        api.has_param :attribution_app_id, 'string'
         api.has_param :audio_story_wave_animation_handle, 'string'
         api.has_param :backdated_post, { list: 'string' }
         api.has_param :call_to_action, 'object'
